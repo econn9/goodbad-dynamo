@@ -1,0 +1,24 @@
+{
+  "name": "dynamo-demo",
+  "version": "1.0.0",
+  "description": "converting to a dynamodb backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "ping"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/econn9/goodbad-dynamo.git"
+  },
+  "keywords": [
+    "dynamodb",
+    "node.js",
+    "aws"
+  ],
+  "author": "Eugene Connor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/econn9/goodbad-dynamo/issues"
+  },
+  "homepage": "https://github.com/econn9/goodbad-dynamo#readme"
+}
