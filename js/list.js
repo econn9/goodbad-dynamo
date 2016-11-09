@@ -1,3 +1,4 @@
+var getDay = '';
 
 (function() {
     $(document).ready(function() {
@@ -7,13 +8,16 @@
         let day = date.getDate();
         let month = date.getMonth() + 1;
 
+        function groomGetDay() {
+            day < 10 ? getDay += '0'+day : getDay+=day;
+            month < 10 ? getDay += '0'+month : getDay+=month;
+        }
+
+        groomGetDay();
+
+
         let monthNames = ["0", "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
-
-
-
-        // var day = 222;
-        // var month = 111;
 
         $('#month').append(monthNames[month]);
         window.addEventListener('load', buildDays(day));
@@ -38,17 +42,17 @@
         function addLi(el, val){
             switch(!!val){
                 case (val === 1 || val === 21 || val === 31):
-                    el.push('<li>'+ val + '</li>');
+                    el.push('<li>'+ val + '<sup>st</sup></li>');
                     break;
                 case (val === 2 || val === 22):
-                    el.push('<li>'+ val + '</li>');
+                    el.push('<li>'+ val + '<sup>nd</sup></li>');
                     break;
                 case (val === 3 || val === 23):
-                    el.push('<li>'+ val + '</li>');
+                    el.push('<li>'+ val + '<sup>rd</sup></li>');
                     break;
                 case (val>3 && val<21):
                 case(val>23 && val<31):
-                    el.push('<li>'+ val + '</li>');
+                    el.push('<li>'+ val + '<sup>th</sup></li>');
                     break;
             }
         }

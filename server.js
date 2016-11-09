@@ -91,6 +91,10 @@
         });
     });
 
+    // app.post('/api/setDate', function (req, res) {
+    //     console.log("+++++++++ ", req);
+    // });
+
     app.post('/api/event', function(request, response) {
         let daymonthVal = '' + groomDateInt(request.body.month) + groomDateInt(request.body.day);
         let entry = {

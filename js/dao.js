@@ -2,9 +2,10 @@
 (function() {
     $(document).ready(function() {
 
+        // getDay = '0506';
         $.ajax({
             method:'GET',
-            url: '/api/event/0526',
+            url: '/api/event/'+getDay,
             success: function(data) {
                     $('#bad').append('<h2>' + data.Item.badYear + '</h2>');
                     $('#good').append('<h2>' + data.Item.goodYear + '</h2>');

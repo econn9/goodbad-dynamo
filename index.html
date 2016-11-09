@@ -24,26 +24,17 @@
 <body>
     <div class="shabang">
 
-
         <div class="header-bar top-bar">
-            <div class="navbarr">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </a>
-                        <a class="brand" href="#">SUBMIT</a>
-                        <a class="brand" href="#">CONTACT</a>
-                        <a class="brand" href="#">FAQ</a>
+            <form id="inputDay" action="javascript:;" onsubmit="setGetDay(this)">
+                <div class="" style="display:none;">
+                  <label for="inputDay">GoTo (mmdd)</label>
+                  <input class="" type="text" id="inputDayBox" name="inputDay">
+                  <input class="btn btn-primary" type="submit">
 
-                        <!-- /.nav-collapse -->
-                    </div>
                 </div>
-                <!-- /navbar-inner -->
-            </div>
-            <span id="month"></span>
+            </form>
+
+        <span id="month"></span>
 
         </div>
         <div class="header-bar days-bar">
