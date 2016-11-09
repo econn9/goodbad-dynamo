@@ -1,26 +1,33 @@
 (function () {
     'use strict';
 
-    let path = require('path');
-    let mongoose = require('mongoose');
-    let bodyParser = require('body-parser');
-    let express = require('express');
-    let Rx = require('rx');
+    let path = require('path'),
+        bodyParser = require('body-parser'),
+        express = require('express'),
+        app = express();
 
-    let app = express();
-
-    mongoose.connect('mongodb://localhost/goodbad');
-
-    let today = mongoose.model('today', {
-        good: String,
-        goodLink: String,
-        goodYear: Number,
-        bad: String,
-        badLink: String,
-        badYear: Number,
-        day: Number,
-        month: Number
+    AWS.config.update({
+            region: "us-east-2",
+            endpoint: "http://localhost:8010"
     });
+
+    let dynamo = new AWS.DynamoDB(),
+        docClient = new AWS.DynamoDB.DocumentClient();
+
+    let params = {
+        TableName : "memes",
+        KeySchema: [
+            { AttributeName: "name", KeyType: "HASH"},  //Partition key
+        ],
+        AttributeDefinitions: [
+            { AttributeName: "name", AttributeType: "S" }
+        ],
+        ProvisionedThroughput: {
+            ReadCapacityUnits: 10,
+            WriteCapacityUnits: 10
+        }
+    };
+
     app.use("/css", express.static(__dirname + '/css'));
     app.use("/js", express.static(__dirname + '/js'));
 
