@@ -15,7 +15,7 @@
         docClient = new AWS.DynamoDB.DocumentClient();
 
     let params = {
-        TableName : "test1",
+        TableName : "events",
         KeySchema: [
             { AttributeName: "daymonth", KeyType: "HASH"},  //Partition key
         ],
