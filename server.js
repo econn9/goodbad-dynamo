@@ -15,12 +15,12 @@
         docClient = new AWS.DynamoDB.DocumentClient();
 
     let params = {
-        TableName : "memes",
+        TableName : "events",
         KeySchema: [
-            { AttributeName: "name", KeyType: "HASH"},  //Partition key
+            { AttributeName: "eventId", KeyType: "HASH"},  //Partition key
         ],
         AttributeDefinitions: [
-            { AttributeName: "name", AttributeType: "S" }
+            { AttributeName: "eventId", AttributeType: "S" }
         ],
         ProvisionedThroughput: {
             ReadCapacityUnits: 10,
@@ -67,13 +67,13 @@
         response.sendFile(path.resolve('input.html'));
     });
 
-    app.get('/api/memes/:name', function (request, response) {
-        let key = request.params.name;
+    app.get('/api/events/:eventId', function (request, response) {
+        let key = request.params.eventId;
 
         let getParams = {
             TableName:params.TableName,
             Key: {
-                name: key
+                eventId: key
             }
         }
 
@@ -87,20 +87,24 @@
         });
     });
 
-    app.get('api/memes', function (request, response) {
-        today.find({}, function (err, memes) {
-            response.json(memes);
+    app.get('api/events', function (request, response) {
+        today.find({}, function (err, events) {
+            response.json(events);
         });
     });
 
-    app.post('/api/memes', function(request, response) {
+    app.post('/api/events', function(request, response) {
         let entry = {
             TableName:params.TableName,
             Item: {
-                "name": request.body.name, //must be a string
-                "date": request.body.date,
-                "desc": request.body.desc,
-                "imgUrl": request.body.badYear
+                month: request.body.month,
+                day: request.body.day,
+                good: request.body.good,
+                goodLink: request.body.goodLink,
+                goodYear: request.body.goodYear,
+                bad: request.body.bad,
+                badLink: request.body.badLink,
+                badYear: request.body.badYear
             }
         }
 
@@ -114,13 +118,13 @@
         });
     });
 
-    app.put('/api/meme/:name', function (request, response) {
+    app.put('/api/event/:eventId', function (request, response) {
         // TODO
     });
 
-    app.delete('/api/memes/:name', function(request, response) {
-        var name = request.body.name;
-        today.remove({ _id: name }, function(err) {
+    app.delete('/api/event/:eventId', function(request, response) {
+        var eventId = request.body.eventId;
+        today.remove({ _id: eventId }, function(err) {
             if(err) {
                 response.json({
                     error: err
