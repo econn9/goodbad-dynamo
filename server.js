@@ -15,12 +15,12 @@
         docClient = new AWS.DynamoDB.DocumentClient();
 
     let params = {
-        TableName : "memes",
+        TableName : "test1",
         KeySchema: [
-            { AttributeName: "name", KeyType: "HASH"},  //Partition key
+            { AttributeName: "daymonth", KeyType: "HASH"},  //Partition key
         ],
         AttributeDefinitions: [
-            { AttributeName: "name", AttributeType: "S" }
+            { AttributeName: "daymonth", AttributeType: "S" }
         ],
         ProvisionedThroughput: {
             ReadCapacityUnits: 10,
@@ -92,10 +92,6 @@
         });
     });
 
-    app.put('/api/event/:eventId', function (request, response) {
-
-    });
-
     app.delete('/api/event/:eventId', function(request, response) {
         var eventId = request.body.eventId;
         today.remove({ _id: eventId }, function(err) {
@@ -109,10 +105,14 @@
             response.end();
         });
     });
-
-    app.listen(9000, function(){
-        let time = new Date();
-        console.log('we up on 80 ma nigga', time);
+    app.put('/api/event/:eventId', function (request, response) {
+        // TODO
     });
+
+    app.listen(8002, function(){
+        let time = new Date();
+        console.log('we up...   -_______- ', time);
+    });
+
 
 })();
