@@ -99,7 +99,7 @@
         });
     });
 
-    app.put('/api/meme/:name', function(request, response) {
+    app.put('/api/event/:eventId', function(request, response) {
         // TODO
     });
 
