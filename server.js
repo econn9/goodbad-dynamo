@@ -118,19 +118,24 @@
         // TODO
     });
 
-    app.delete('/api/memes/:name', function(request, response) {
-        var name = request.body.name;
-        today.remove({ _id: name }, function(err) {
-            if(err) {
-                response.json({
-                    error: err
-                });
-                return;
+    app.delete('/api/meme/:name', function(request, response) {
+        var nameVal = request.body.name;
+        let entry = {
+            TableName:params.TableName,
+            Key: {
+                name: nameVal
             }
+        }
 
-            response.end();
+        docClient.delete(entry, function (err, data) {
+            if (err) {
+                console.error("DELETE FAILED: ", err);
+            } else {
+                console.log(nameVal + ' was successfully deleted.')
+            }
         });
     });
+
 
     app.listen(8002, function(){
         let time = new Date();
