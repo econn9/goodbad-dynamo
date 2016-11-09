@@ -15,12 +15,12 @@
         docClient = new AWS.DynamoDB.DocumentClient();
 
     let params = {
-        TableName : "memes",
+        TableName : "events",
         KeySchema: [
-            { AttributeName: "name", KeyType: "HASH"},  //Partition key
+            { AttributeName: "eventId", KeyType: "HASH"},  //Partition key
         ],
         AttributeDefinitions: [
-            { AttributeName: "name", AttributeType: "S" }
+            { AttributeName: "eventId", AttributeType: "S" }
         ],
         ProvisionedThroughput: {
             ReadCapacityUnits: 10,
@@ -67,13 +67,13 @@
         response.sendFile(path.resolve('input.html'));
     });
 
-    app.get('/api/memes/:name', function (request, response) {
-        let key = request.params.name;
+    app.get('/api/events/:eventId', function (request, response) {
+        let key = request.params.eventId;
 
         let getParams = {
             TableName:params.TableName,
             Key: {
-                name: key
+                eventId: key
             }
         }
 
@@ -97,10 +97,13 @@
         let entry = {
             TableName:params.TableName,
             Item: {
-                "name": request.body.name, //must be a string
-                "date": request.body.date,
-                "desc": request.body.desc,
-                "imgUrl": request.body.badYear
+            "daymonth": daymonthVal, //must be a string
+                "bad": request.body.bad,
+                "badLink": request.body.badLink,
+                "badYear": request.body.badYear,
+                "good": request.body.good,
+                "goodLink": request.body.goodLink,
+                "goodYear": request.body.goodYear
             }
         }
 
@@ -114,16 +117,16 @@
         });
     });
 
-    app.put('/api/meme/:name', function (request, response) {
+    app.put('/api/events/:eventId', function (request, response) {
         // TODO
     });
 
-    app.delete('/api/meme/:name', function(request, response) {
-        var nameVal = request.body.name;
+    app.delete('/api/events/:eventId', function(request, response) {
+        var eventIdVal = request.body.eventId;
         let entry = {
             TableName:params.TableName,
             Key: {
-                name: nameVal
+                eventId: eventIdVal
             }
         }
 
@@ -131,7 +134,7 @@
             if (err) {
                 console.error("DELETE FAILED: ", err);
             } else {
-                console.log(nameVal + ' was successfully deleted.')
+                console.log(eventIdVal + ' was successfully deleted.')
             }
         });
     });
