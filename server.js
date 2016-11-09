@@ -85,10 +85,6 @@
         });
     });
 
-    app.put('/api/event/:eventId', function (request, response) {
-
-    });
-
     app.delete('/api/event/:eventId', function(request, response) {
         var eventId = request.body.eventId;
         today.remove({ _id: eventId }, function(err) {
@@ -103,9 +99,13 @@
         });
     });
 
-    app.listen(9000, function(){
+    app.put('/api/meme/:name', function(request, response) {
+        // TODO
+    });
+
+    app.listen(8002, function() {
         let time = new Date();
-        console.log('we up on 80 ma nigga', time);
+        console.log('we up...   -_______- ', time);
     });
 
 })();
