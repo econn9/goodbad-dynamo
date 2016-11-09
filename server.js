@@ -28,6 +28,31 @@
         }
     };
 
+
+    dynamo.describeTable({TableName: params.TableName}, function (err, data) {
+            if (err) {
+                   console.error("***Red Alert*** describeTable failed. Message: ", JSON.stringify(err, null, 2));
+               } else {
+                   console.log(params.TableName+ " table created. JSON: ", JSON.stringify(data, null, 2));
+                   if (!data.Table.TableStatus == "ACTIVE"){
+                       createDynamoTable(params);
+                   }
+               }
+        });
+
+
+    function createDynamoTable(params){
+        dynamo.createTable(params, function(err, data) {
+            if (err) {
+                console.error("***Red Alert*** createTable failed. Message:", JSON.stringify(err, null, 2));
+            } else {
+                console.log("Successfully created table: ", JSON.stringify(data, null, 2));
+            }
+        });
+    }
+
+
+
     app.use("/css", express.static(__dirname + '/css'));
     app.use("/js", express.static(__dirname + '/js'));
 
@@ -42,63 +67,60 @@
         response.sendFile(path.resolve('input.html'));
     });
 
-    app.get('/api/event/:month/:day', function (request, response) {
-        let month = request.params.month;
-        let day = request.params.day;
+    app.get('/api/memes/:name', function (request, response) {
+        let key = request.params.name;
 
-        today.find({'month': month, 'day': day}, function(err, events) {
-            if(err) {
-                response.json({
-                    error: err
-                });
-                return;
+        let getParams = {
+            TableName:params.TableName,
+            Key: {
+                name: key
             }
+        }
 
-            response.json(events);
-        });
-
-    });
-
-    app.get('api/events', function (request, response) {
-        today.find({}, function (err, events) {
-            response.json(events);
-        });
-    });
-
-    app.post('/api/event', function(request, response) {
-        console.log('body is >>> ' + request.body);
-
-        let insert = new today({
-            month: request.body.month,
-            day: request.body.day,
-            good: request.body.good,
-            goodLink: request.body.goodLink,
-            goodYear: request.body.goodYear,
-            bad: request.body.bad,
-            badLink: request.body.badLink,
-            badYear: request.body.badYear
-        });
-
-        insert.save(function(err, event) {
-            console.log('body is >>> ' + request.body);
-
-            if(err) {
-                response.json({
-                    error: err
-                });
-                return;
+        docClient.get(getParams, function(err, data) {
+            if (err) {
+                console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+            } else {
+                console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
+                response.json(data);
             }
-            response.json(event);
         });
     });
 
-    app.put('/api/event/:eventId', function (request, response) {
-
+    app.get('api/memes', function (request, response) {
+        today.find({}, function (err, memes) {
+            response.json(memes);
+        });
     });
 
-    app.delete('/api/event/:eventId', function(request, response) {
-        var eventId = request.body.eventId;
-        today.remove({ _id: eventId }, function(err) {
+    app.post('/api/memes', function(request, response) {
+        let entry = {
+            TableName:params.TableName,
+            Item: {
+                "name": request.body.name, //must be a string
+                "date": request.body.date,
+                "desc": request.body.desc,
+                "imgUrl": request.body.badYear
+            }
+        }
+
+        docClient.put(entry, function(err, data) {
+            if (err) {
+                console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+            } else {
+                console.log("Added item:", JSON.stringify(data, null, 2));
+                response.json(data);
+            }
+        });
+    });
+
+    app.put('/api/meme/:name', function (request, response) {
+        // TODO
+    });
+
+    app.delete('/api/memes/:name', function(request, response) {
+        var name = request.body.name;
+        today.remove({ _id: name }, function(err) {
             if(err) {
                 response.json({
                     error: err
@@ -110,9 +132,9 @@
         });
     });
 
-    app.listen(9000, function(){
+    app.listen(8002, function(){
         let time = new Date();
-        console.log('we up on 80 ma nigga', time);
+        console.log('we up...   -_______- ', time);
     });
 
 })();
