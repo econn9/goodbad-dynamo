@@ -87,12 +87,6 @@
         });
     });
 
-    app.get('api/events', function (request, response) {
-        today.find({}, function (err, events) {
-            response.json(events);
-        });
-    });
-
     app.post('/api/events', function(request, response) {
         let entry = {
             TableName:params.TableName,
