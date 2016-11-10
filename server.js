@@ -1,5 +1,6 @@
 (function () {
     'use strict';
+    let AWS = require('aws-sdk');
 
     let path = require('path'),
         bodyParser = require('body-parser'),
