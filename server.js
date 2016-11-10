@@ -5,7 +5,6 @@
     let mongoose = require('mongoose');
     let bodyParser = require('body-parser');
     let express = require('express');
-    let Rx = require('rx');
 
     let app = express();
 
