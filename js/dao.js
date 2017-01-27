@@ -2,7 +2,7 @@
 (function() {
     $(document).ready(function() {
 
-        // getDay = '0506';
+        getDay = '0822';
         $.ajax({
             method:'GET',
             url: '/api/event/'+getDay,

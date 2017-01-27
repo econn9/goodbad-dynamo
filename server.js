@@ -4,7 +4,7 @@
 
     AWS.config.update({
         region: "us-east-2",
-        endpoint: "http://localhost:8010"
+        endpoint: "aws:dynamodb:us-west-2:666451191595:table/goodbad"
     });
 
     ///////////////////////////
@@ -31,17 +31,26 @@
         }
     };
 
-    dynamo.describeTable({TableName: params.TableName}, function (err, data) {
-        if (err) {
-               console.error("***Red Alert*** describeTable failed. Message: ", JSON.stringify(err, null, 2));
-           } else {
-               console.log(params.TableName+ " table created. JSON: ", JSON.stringify(data, null, 2));
-               if (!data.Table.TableStatus == "ACTIVE"){
-                   createDynamoTable(params);
-               }
-           }
-    });
+    // dynamo.describeTable({TableName: params.TableName}, function (err, data) {
+    //     if (err) {
+    //            console.error("***Red Alert*** describeTable failed. Message: ", JSON.stringify(err, null, 2));
+    //        } else {
+    //            console.log(params.TableName+ " table created. JSON: ", JSON.stringify(data, null, 2));
+    //            if (!data.Table.TableStatus == "ACTIVE"){
+    //                createDynamoTable(params);
+    //            } else {
+    //                console.log("Table is live.");
+    //            }
+    //        }
+    // });
 
+dynamo.describeTable({TableName: "goodbad"}, function (err, data) {
+    if (err) {
+       console.error("I'm afraid I couldnt do that for you, master. Error: ", JSON.stringify(err, null, 2));
+   } else {
+       console.log("Table found. JSON: ", JSON.stringify(data, null, 2));
+   }
+});
 
     function createDynamoTable(params){
         dynamo.createTable(params, function(err, data) {
@@ -98,7 +107,7 @@
     app.post('/api/event', function(request, response) {
         let daymonthVal = '' + groomDateInt(request.body.month) + groomDateInt(request.body.day);
         let entry = {
-            TableName:"test1",
+            TableName:"goodbad",
             Item: {
                 "daymonth": daymonthVal, //must be a string
                 "bad": request.body.bad,
